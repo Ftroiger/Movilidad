@@ -1,12 +1,17 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AuthService } from '../../auth/src/auth.service'; // <-- ajustá según tu estructura real
 
-@Controller()
+@Controller('auth/vedi')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly authService: AuthService) {}
 
+  /**
+   * Intercambia un sesionId por el token de VeDi,
+   * luego genera un JWT propio y devuelve ambos tokens + datos del usuario
+   */
   @Post()
-  newUser(@Body() body: any): string {
-    return this.appService.newUser(body);
+  async validarSesion(@Body('sesionId') sesionId: string) {
+    return this.authService.validarTokenSesion(sesionId); // que internamente llama ambas funciones
   }
+
 }
